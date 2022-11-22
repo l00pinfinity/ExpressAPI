@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class ExternalExpressRequest {
+public class ExpressRequest {
 
     @JsonProperty("BusinessShortCode")
     private int BusinessShortCode;

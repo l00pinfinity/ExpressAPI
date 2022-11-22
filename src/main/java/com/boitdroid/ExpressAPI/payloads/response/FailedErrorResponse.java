@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class AccessTokenFailedResponse {
+public class FailedErrorResponse {
 
     @JsonProperty("requestId")
     private String requestId;

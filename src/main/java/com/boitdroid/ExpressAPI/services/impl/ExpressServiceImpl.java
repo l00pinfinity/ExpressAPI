@@ -1,7 +1,7 @@
 package com.boitdroid.ExpressAPI.services.impl;
 
 import com.boitdroid.ExpressAPI.payloads.request.ExpressQueryRequest;
-import com.boitdroid.ExpressAPI.payloads.request.ExternalExpressRequest;
+import com.boitdroid.ExpressAPI.payloads.request.ExpressRequest;
 import com.boitdroid.ExpressAPI.payloads.request.InternalExpressRequest;
 import com.boitdroid.ExpressAPI.payloads.response.*;
 import com.boitdroid.ExpressAPI.services.ExpressService;
@@ -42,7 +42,7 @@ public class ExpressServiceImpl implements ExpressService {
             if (response.isSuccessful()){
                 return objectMapper.readValue(response.body().string(), AccessTokenSuccessfulResponse.class);
             }else {
-                return objectMapper.readValue(response.body().string(), AccessTokenFailedResponse.class);
+                return objectMapper.readValue(response.body().string(), FailedErrorResponse.class);
             }
         }catch (IOException e){
             return e.getLocalizedMessage();
@@ -51,7 +51,7 @@ public class ExpressServiceImpl implements ExpressService {
 
     @Override
     public Object stkPush(InternalExpressRequest internalExpressRequest) throws IOException {
-        ExternalExpressRequest expressRequest = new ExternalExpressRequest();
+        ExpressRequest expressRequest = new ExpressRequest();
 
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String password = HelperUtils.expressPassword(Constants.BUSINESS_SHORTCODE,"bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",timeStamp);
@@ -83,7 +83,7 @@ public class ExpressServiceImpl implements ExpressService {
         if (response.isSuccessful()){
             return objectMapper.readValue(response.body().string(), STKPushSuccessfulResponse.class);
         }else{
-            return objectMapper.readValue(response.body().string(), STKPushFailedResponse.class);
+            return objectMapper.readValue(response.body().string(), FailedErrorResponse.class);
         }
     }
 
@@ -114,7 +114,7 @@ public class ExpressServiceImpl implements ExpressService {
         if (response.isSuccessful()){
             return objectMapper.readValue(response.body().string(), ExpressQuerySuccessfulResponse.class);
         }else {
-            return objectMapper.readValue(response.body().string(), ExpressQueryFailedResponse.class);
+            return objectMapper.readValue(response.body().string(), FailedErrorResponse.class);
         }
     }
 }

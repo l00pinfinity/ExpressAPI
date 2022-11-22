@@ -1,7 +1,6 @@
 package com.boitdroid.ExpressAPI.controllers;
 
 import com.boitdroid.ExpressAPI.payloads.request.ExpressQueryRequest;
-import com.boitdroid.ExpressAPI.payloads.request.ExternalExpressRequest;
 import com.boitdroid.ExpressAPI.payloads.request.InternalExpressRequest;
 import com.boitdroid.ExpressAPI.services.ExpressService;
 import org.springframework.beans.factory.annotation.Autowired;
