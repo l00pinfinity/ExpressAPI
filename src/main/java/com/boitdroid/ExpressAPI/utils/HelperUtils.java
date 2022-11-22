@@ -1,8 +1,7 @@
 package com.boitdroid.ExpressAPI.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Random;
 
 public class HelperUtils {
@@ -18,20 +17,17 @@ public class HelperUtils {
 
         Random random = new Random();
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 12; i++) {
             int index = random.nextInt(alphaNumeric.length());
             char randomChar = alphaNumeric.charAt(index);
             stringBuilder.append(randomChar);
         }
-
         return stringBuilder.toString();
     }
 
-    public static String convertToJson(Object object){
-        try{
-            return new ObjectMapper().writeValueAsString(object);
-        }catch (JsonProcessingException e){
-            return null;
-        }
+    //Generate express request password
+    public static String expressPassword(int businessShortCode, String expressPasskey, String timestamp) {
+        String fullString = businessShortCode + expressPasskey + timestamp;
+        return Base64.getEncoder().encodeToString(fullString.getBytes(StandardCharsets.UTF_8));
     }
 }
