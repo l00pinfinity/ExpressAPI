@@ -1,5 +1,6 @@
 package com.boitdroid.ExpressAPI.services;
 
+import com.boitdroid.ExpressAPI.payloads.request.ExpressQueryRequest;
 import com.boitdroid.ExpressAPI.payloads.request.ExternalExpressRequest;
 import com.boitdroid.ExpressAPI.payloads.request.InternalExpressRequest;
 import org.springframework.stereotype.Service;
@@ -15,4 +16,5 @@ public interface ExpressService {
     Object stkPush(InternalExpressRequest internalExpressRequest) throws IOException;
 
     //ExpressStatusQuery
+    Object stkPushQuery(ExpressQueryRequest expressQueryRequest) throws IOException;
 }

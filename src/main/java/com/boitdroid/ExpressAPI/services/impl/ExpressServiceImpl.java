@@ -1,11 +1,9 @@
 package com.boitdroid.ExpressAPI.services.impl;
 
+import com.boitdroid.ExpressAPI.payloads.request.ExpressQueryRequest;
 import com.boitdroid.ExpressAPI.payloads.request.ExternalExpressRequest;
 import com.boitdroid.ExpressAPI.payloads.request.InternalExpressRequest;
-import com.boitdroid.ExpressAPI.payloads.response.AccessTokenFailedResponse;
-import com.boitdroid.ExpressAPI.payloads.response.AccessTokenSuccessfulResponse;
-import com.boitdroid.ExpressAPI.payloads.response.STKPushFailedResponse;
-import com.boitdroid.ExpressAPI.payloads.response.STKPushSuccessfulResponse;
+import com.boitdroid.ExpressAPI.payloads.response.*;
 import com.boitdroid.ExpressAPI.services.ExpressService;
 import com.boitdroid.ExpressAPI.utils.Constants;
 import com.boitdroid.ExpressAPI.utils.HelperUtils;
@@ -86,6 +84,37 @@ public class ExpressServiceImpl implements ExpressService {
             return objectMapper.readValue(response.body().string(), STKPushSuccessfulResponse.class);
         }else{
             return objectMapper.readValue(response.body().string(), STKPushFailedResponse.class);
+        }
+    }
+
+    @Override
+    public Object stkPushQuery(ExpressQueryRequest expressQueryRequest) throws IOException {
+        ExpressQueryRequest queryRequest = new ExpressQueryRequest();
+
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String password = HelperUtils.expressPassword(Constants.BUSINESS_SHORTCODE,"bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",timeStamp);
+
+        queryRequest.setBusinessShortCode(Constants.BUSINESS_SHORTCODE);
+        queryRequest.setPassword(password);
+        queryRequest.setTimestamp(timeStamp);
+        queryRequest.setCheckoutRequestID(expressQueryRequest.getCheckoutRequestID());
+
+        AccessTokenSuccessfulResponse accessTokenSuccessfulResponse = (AccessTokenSuccessfulResponse) authGetToken();
+        Gson gson = new Gson();
+        RequestBody requestBody = RequestBody.create(MediaType.Companion.get("application/json"),Objects.requireNonNull(gson.toJson(queryRequest)));
+
+        Request request = new Request.Builder()
+                .url(Constants.EXPRESSSTATUS_URL)
+                .post(requestBody)
+                .addHeader("Authorization","Bearer " + accessTokenSuccessfulResponse.getAccessToken())
+                .build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        assert response.body() != null;
+        if (response.isSuccessful()){
+            return objectMapper.readValue(response.body().string(), ExpressQuerySuccessfulResponse.class);
+        }else {
+            return objectMapper.readValue(response.body().string(), ExpressQueryFailedResponse.class);
         }
     }
 }
