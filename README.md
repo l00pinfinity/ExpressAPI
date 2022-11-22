@@ -113,6 +113,48 @@ curl --location --request POST 'http://localhost:8080/stkPush' \
   }
 }
 ```
+
+### Step 3: Express Query Status
+| METHOD | POST                                                                 |
+|--------|----------------------------------------------------------------------|
+| URL    | Sandbox: https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query |
+
+##### Successful Request
+
+```yaml
+curl --location --request POST 'http://localhost:8080/stkPush/status' \
+--header 'Content-Type: application/json' \
+  --data-raw '{
+"CheckoutRequestID": "ws_CO_22112022164548577748458100"
+}'
+```
+##### Request Fields
+| NAME              | DESCRIPTION                                                                        | TYPE    |
+|-------------------|------------------------------------------------------------------------------------|---------|
+| CheckoutRequestID | This is a globally unique identifier of the processed checkout transaction request | Integer |
+
+#### Successful Response
+```yaml
+{
+  "ResponseCode": "0",
+  "ResponseDescription": "The service request has been accepted successsfully",
+  "MerchantRequestID": "5468-13551780-2",
+  "CheckoutRequestID": "ws_CO_22112022164548577748458100",
+  "ResultCode": "0",
+  "ResultDesc": "The service request is processed successfully."
+}
+```
+
+##### Response Fields
+| NAME                | DESCRIPTION                                                                    | TYPE      |
+|---------------------|--------------------------------------------------------------------------------|-----------|
+| ResponseCode        | 0 means successful submission                                                  | Integer   |
+| ResponseDescription | Acknowledgment message of successful submission request                        | String    |
+| MerchantRequestID   | Timestamp of the transaction with format(YEAR+MONTH+DATE+HOUR+MINUTE+SECOND)   | Timestamp |
+| CheckoutRequestID   | Global unique identifier of the processed transaction checkout                 | String    |
+| ResultCode          | 0 means successful transaction by customer, any other means an error occurred. | Integer   |
+| ResultDesc          | Acknowledgment message describing the transaction status                       | String    |
+
 #### Error Codes
 | ERROR CODE   | DESCRIPTION                    |
 |--------------|--------------------------------|
